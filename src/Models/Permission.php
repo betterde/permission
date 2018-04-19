@@ -3,11 +3,14 @@
 namespace Betterde\Permission\Models;
 
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Database\Eloquent\Model;
+use Betterde\Role\Contracts\RoleContract;
+use Betterde\Permission\Contracts\PermissionContract;
 use Betterde\Permission\Exceptions\PermissionException;
 
-class Permission extends Model
+class Permission extends Model implements PermissionContract
 {
     /**
      * 定义主键字段
@@ -121,6 +124,12 @@ class Permission extends Model
         try {
             $role = static::findOrFail($code);
             $role->update($attributes);
+            if (! $new_code = array_get($attributes, 'code') === $code) {
+                DB::table(config('authorization.relation.role_permission'))->where('permission_code', $code)->update(['role_code' => $new_code]);
+                $value = Redis::connection(config('role.cache.database'))->hget(config('role.cache.prefix') . ':role_permissions', [$code]);
+                Redis::connection(config('role.cache.database'))->hdel(config('role.cache.prefix') . ':role_permissions', [$code]);
+                Redis::connection(config('role.cache.database'))->hset(config('role.cache.prefix') . ':role_permissions', array_get($attributes, 'code', $code), $value);
+            }
             Redis::connection(config('permission.cache.database'))->hdel(config('permission.cache.prefix') . ':permissions', [$code]);
             Redis::connection(config('permission.cache.database'))->hset(config('permission.cache.prefix') . ':permissions', array_get($attributes, 'code', $code), $role);
             return $role;
@@ -148,5 +157,17 @@ class Permission extends Model
         } catch (Exception $exception) {
             throw new PermissionException('删除权限失败', 500);
         }
+    }
+
+    /**
+     * 定义权限关联角色信息
+     *
+     * Date: 19/04/2018
+     * @author George
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(RoleContract::class, config('authorization.relation.role_permission'), 'permission_code', 'role_code', 'code', 'code');
     }
 }

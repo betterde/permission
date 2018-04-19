@@ -6,7 +6,6 @@ return [
     'cache' => [
         'enable' => true,
         'prefix' => 'betterde',
-        'ttl' => 60,
         'database' => 'cache'
     ]
 ];
