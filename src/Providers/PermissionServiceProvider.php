@@ -2,6 +2,7 @@
 
 namespace Betterde\Permission\Providers;
 
+use Betterde\Permission\Contracts\PermissionContract;
 use Illuminate\Support\ServiceProvider;
 use Betterde\Role\Contracts\RoleContract;
 use Betterde\Permission\Commands\SetCache;
@@ -57,6 +58,6 @@ class PermissionServiceProvider extends ServiceProvider
      */
     protected function registerModelBindings()
     {
-        $this->app->bind(RoleContract::class, config('permission.model'));
+        $this->app->bind(PermissionContract::class, config('permission.model'));
     }
 }
