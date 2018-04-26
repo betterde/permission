@@ -149,4 +149,28 @@ class Permission extends Model
             throw new PermissionException('删除权限失败', 500);
         }
     }
+
+    /**
+     * 定义权限关联角色信息
+     *
+     * Date: 19/04/2018
+     * @author George
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(RoleContract::class, config('authorization.relation.role_permission'), 'permission_code', 'role_code', 'code', 'code');
+    }
+
+    /**
+     * 定义多态模型关联
+     *
+     * Date: 20/04/2018
+     * @author George
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo|mixed
+     */
+    public function permissiontable()
+    {
+        return $this->morphTo();
+    }
 }
