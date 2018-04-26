@@ -68,4 +68,13 @@ interface PermissionContract
      * @return mixed
      */
     public function roles();
+
+    /**
+     * 定义权限多态关系
+     *
+     * Date: 20/04/2018
+     * @author George
+     * @return mixed
+     */
+    public function permissiontable();
 }

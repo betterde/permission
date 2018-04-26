@@ -170,4 +170,16 @@ class Permission extends Model implements PermissionContract
     {
         return $this->belongsToMany(RoleContract::class, config('authorization.relation.role_permission'), 'permission_code', 'role_code', 'code', 'code');
     }
+
+    /**
+     * 定义多态模型关联
+     *
+     * Date: 20/04/2018
+     * @author George
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo|mixed
+     */
+    public function permissiontable()
+    {
+        return $this->morphTo();
+    }
 }
