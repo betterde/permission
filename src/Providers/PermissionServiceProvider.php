@@ -2,7 +2,6 @@
 
 namespace Betterde\Permission\Providers;
 
-use Betterde\Permission\Contracts\PermissionContract;
 use Illuminate\Support\ServiceProvider;
 use Betterde\Permission\Commands\SetCache;
 use Betterde\Permission\Commands\FlushCache;
