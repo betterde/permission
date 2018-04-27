@@ -69,6 +69,7 @@ interface PermissionContract
      */
     public function roles();
 
+
     /**
      * 定义权限多态关系
      *

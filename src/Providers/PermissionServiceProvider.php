@@ -4,9 +4,9 @@ namespace Betterde\Permission\Providers;
 
 use Betterde\Permission\Contracts\PermissionContract;
 use Illuminate\Support\ServiceProvider;
-use Betterde\Role\Contracts\RoleContract;
 use Betterde\Permission\Commands\SetCache;
 use Betterde\Permission\Commands\FlushCache;
+use Betterde\Permission\Contracts\PermissionContract;
 
 /**
  * Date: 19/04/2018
